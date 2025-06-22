@@ -23,13 +23,13 @@ export default function Home() {
 
   return (
     <div>
-      <section className="flex flex-col items-center justify-center w-full h-[45vh] gap-4 bg-gradient-to-br from-background via-muted to-secondary">
-        <div>
-          <h1 className="text-2xl text-foreground font-bold tracking-tighter md:text-3xl">
+      <section className="flex flex-col items-center justify-center w-full h-[45vh] gap-4 p-4 bg-gradient-to-br from-background via-muted to-secondary">
+        <div className="flex flex-col items-center gap-2">
+          <h1 className="text-xl text-foreground font-bold tracking-tighter md:text-3xl">
             Manage your content with ease!
           </h1>
-          <p className="mx-auto text-muted-foreground">
-            Streamline your content workflow and publish with confidence.
+          <p className="mx-auto tracking-tight text-muted-foreground">
+            Streamline your content workflow with our user-friendly CMS.
           </p>
         </div>
         <div className="flex flex-row gap-4">
@@ -38,7 +38,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col items-center justify-center w-full min-h-[50vh] gap-4 bg-gradient-to-br from-secondary via-muted/40 to-background border-t py-5">
+      <section className="flex flex-col items-center justify-center w-full min-h-[35vh] gap-4 bg-gradient-to-br from-secondary via-muted/40 to-background border-t p-4">
         <h2 className="text-xl font-semibold text-foreground">Why choose our CMS?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {features.map((feature) => (
@@ -56,14 +56,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      <section className="flex flex-col items-center justify-center w-full h-[91vh] gap-4 bg-gradient-to-br from-muted/20 via-muted to-muted-foreground/10 border-t">
-        <h2 className="text-xl font-semibold text-foreground">What you can do</h2>
-        <p className="text-muted-foreground max-w-md text-center">
-          Write, edit, and publish your blogs with smart automation and clean UI.
-        </p>
-      </section>
-
     </div>
   );
 }

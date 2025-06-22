@@ -5,6 +5,8 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/general/app-sidebar";
 import { SiteHeader } from "@/components/general/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Button } from "@/components/ui/button";
+import { BringToFront } from "lucide-react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -47,6 +49,17 @@ export default function RootLayout({
               </div>
               <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
             </div> */}
+            <header>
+              <div className="flex items-center justify-between px-4 py-2 text-chart-3">
+                <div className="flex items-center justify-center gap-2">
+                  <BringToFront />
+                    <h1 className="text-xl font-bold">Neuro Press</h1>
+                </div>
+                <div>
+                    <Button variant={'outline'}>Sign In</Button>
+                </div>
+              </div>
+            </header>
                   <main className="w-full">
                     {children}
                   </main>

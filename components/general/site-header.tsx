@@ -1,6 +1,6 @@
 "use client"
 
-import { SidebarIcon } from "lucide-react"
+import { BringToFront } from "lucide-react"
 
 import { SearchForm } from "@/components/general/search-form"
 import {
@@ -15,11 +15,18 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
 import { ModeToggle } from "../toggle-theme"
+import { navItems } from "@/utils/nav-items"
+import { usePathname } from "next/navigation"
 
 export function SiteHeader() {
+  const data = navItems
+  // const path = usePathname()
+  const path = window.location.pathname
+
   const { toggleSidebar } = useSidebar()
 
   return (
+
     <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
       <div className="flex h-(--header-height) w-full items-center gap-2 px-4">
         <Button
@@ -28,7 +35,11 @@ export function SiteHeader() {
           size="icon"
           onClick={toggleSidebar}
         >
-          <SidebarIcon />
+          {/* <SidebarIcon /> */}
+          {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"> */}
+            <BringToFront className="size-4" />
+          {/* </div> */}
+
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
         <div className="flex w-full items-center justify-end md:justify-between">
@@ -36,12 +47,12 @@ export function SiteHeader() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href="#">
-                  Building Your Application
+                  Home
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                <BreadcrumbPage>{data.navMain.find((item) => item.url === path)?.title}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
