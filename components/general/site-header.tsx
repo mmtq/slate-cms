@@ -1,6 +1,6 @@
 "use client"
 
-import { BringToFront } from "lucide-react"
+import { BringToFront, FlipVertical, Sidebar } from "lucide-react"
 
 import { SearchForm } from "@/components/general/search-form"
 import {
@@ -20,8 +20,8 @@ import { usePathname } from "next/navigation"
 
 export function SiteHeader() {
   const data = navItems
-  // const path = usePathname()
-  const path = window.location.pathname
+  const path = usePathname()
+  // const path = window.location.pathname
 
   const { toggleSidebar } = useSidebar()
 
@@ -37,8 +37,9 @@ export function SiteHeader() {
         >
           {/* <SidebarIcon /> */}
           {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"> */}
-            <BringToFront className="size-4" />
+            {/* <BringToFront className="size-4" /> */}
           {/* </div> */}
+        <Sidebar className="size-4" />
 
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
