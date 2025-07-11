@@ -17,6 +17,8 @@ import { useSidebar } from "@/components/ui/sidebar"
 import { ModeToggle } from "../toggle-theme"
 import { navItems } from "@/utils/nav-items"
 import { usePathname } from "next/navigation"
+import Header from "./header"
+import InUpButton from "../auth/in-up-button"
 
 export function SiteHeader() {
   const data = navItems
@@ -37,30 +39,18 @@ export function SiteHeader() {
         >
           {/* <SidebarIcon /> */}
           {/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"> */}
-            {/* <BringToFront className="size-4" /> */}
+          {/* <BringToFront className="size-4" /> */}
           {/* </div> */}
-        <Sidebar className="size-4" />
+          <Sidebar className="size-4" />
 
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
         <div className="flex w-full items-center justify-end md:justify-between">
-          <Breadcrumb className="hidden sm:block">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="#">
-                  Home
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{data.navMain.find((item) => item.url === path)?.title}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <Header />
           <div className="flex items-center gap-2 ">
-            <SearchForm className="w-full sm:ml-auto sm:w-auto" />
+            <SearchForm className="w-full sm:ml-auto sm:w-auto hidden md:block" />
             <ModeToggle />
-
+            <InUpButton />
           </div>
         </div>
       </div>

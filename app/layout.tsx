@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { BringToFront } from "lucide-react";
 import Link from "next/link";
+import Header from "@/components/general/header";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -42,24 +44,6 @@ export default function RootLayout({
               <div className="flex flex-1">
                 <AppSidebar />
                 <SidebarInset className="">
-                  {/* <div className="flex flex-1 flex-col gap-4 p-4">
-              <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div className="bg-muted/50 aspect-video rounded-xl" />
-                <div className="bg-muted/50 aspect-video rounded-xl" />
-                <div className="bg-muted/50 aspect-video rounded-xl" />
-              </div>
-              <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
-            </div> */}
-                  <header className="w-full border-b bg-background">
-                    <div className="flex items-center justify-between px-4 md:px-8 py-4 text-chart-3 max-w-7xl mx-auto">
-                      <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <BringToFront className="w-6 h-6" />
-                        <h1 className="text-xl font-bold">Neuro Press</h1>
-                      </Link>
-                      <Button variant="outline">Sign In</Button>
-                    </div>
-                  </header>
-
                   <main className="w-full px-4 md:px-8 py-6 max-w-7xl mx-auto">
                     {children}
                   </main>
@@ -67,6 +51,7 @@ export default function RootLayout({
               </div>
             </SidebarProvider>
           </div>
+          <Toaster position="top-center" richColors />
         </ThemeProvider>
       </body>
     </html>
