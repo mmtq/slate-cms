@@ -6,6 +6,7 @@ import * as schema from './db/schema/auth-schema'
 
 
 export const auth = betterAuth({
+    appName: "NeuroPress",
     database: drizzleAdapter(db, {
         provider: "sqlite",
         schema
@@ -15,6 +16,13 @@ export const auth = betterAuth({
         minPasswordLength: 6,
         autoSignIn: false,
         requireEmailVerification: false
+    },
+    socialProviders: {
+        google: {
+            enabled: true,
+            clientId: String(process.env.GOOGLE_CLIENT_ID)!,
+            clientSecret: String(process.env.GOOGLE_CLIENT_SECRET)!,
+        },
     },
     session: {
         expiresIn: 60 * 60 * 24 * 30,

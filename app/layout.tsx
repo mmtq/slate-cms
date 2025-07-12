@@ -44,7 +44,7 @@ export default function RootLayout({
               <div className="flex flex-1">
                 <AppSidebar />
                 <SidebarInset className="">
-                  <main className="w-full px-4 md:px-8 py-6 max-w-7xl mx-auto">
+                  <main className="w-full max-w-7xl mx-auto">
                     {children}
                   </main>
                 </SidebarInset>

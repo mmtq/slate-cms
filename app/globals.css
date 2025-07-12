@@ -120,3 +120,48 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .gradient-text {
+    background-image: linear-gradient(to right, #8b5cf6, #ec4899, #ef4444);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .animate-typing {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0ch;
+    animation: typing 3s steps(40, end) forwards;
+  }
+
+  .blinking-cursor {
+    display: inline-block;
+    animation: blink 1s step-end infinite;
+    color: white;
+    margin-left: 1px;
+  }
+}
+
+@keyframes typing {
+  from {
+    width: 0ch;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

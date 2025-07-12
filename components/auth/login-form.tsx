@@ -11,6 +11,7 @@ import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { signIn } from '@/lib/auth-client'
 import Link from 'next/link'
+import SocialProviders from './social-providers'
 
 const loginSchema = z.object({
     email: z.email('Enter a valid email'),
@@ -105,6 +106,7 @@ export default function LoginForm() {
             >
                 {isPending ? 'Logging in...' : 'Login'}
             </Button>
+            <SocialProviders />
         </form>
     )
 }

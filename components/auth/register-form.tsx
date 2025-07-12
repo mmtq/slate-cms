@@ -9,6 +9,7 @@ import { useState, useTransition } from "react"
 import { signUp } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import SocialProviders from "./social-providers"
 
 const validEmailDomains = ['gmail.com', 'yahoo.com', 'outlook.com']
 
@@ -96,7 +97,7 @@ export default function RegisterForm() {
           placeholder="John Doe"
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
-        
+
       </div>
 
       <div className="space-y-2">
@@ -132,6 +133,7 @@ export default function RegisterForm() {
       <Button type="submit" disabled={isPending} onClick={onRegisterSubmit} className="w-full">
         {isPending ? 'Registering...' : 'Register'}
       </Button>
+      <SocialProviders />
     </form>
   )
 }

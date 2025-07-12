@@ -5,12 +5,13 @@ import { Button } from "../ui/button";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Loader, LogOut } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface Props {
-  
+
 }
 
-const SignOutButton = ({  }: Props) => {
+const SignOutButton = ({ }: Props) => {
     const [isPending, startTransition] = useTransition()
 
     const handleSubmit = () => {
@@ -29,9 +30,19 @@ const SignOutButton = ({  }: Props) => {
             }
         })
     }
-  return (
-    <Button size={"sm"} onClick={handleSubmit} variant={"outline"} disabled={isPending}>{isPending ? <Loader className="animate-spin" /> : <LogOut />}</Button>
-  );
+    return (
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Button size={"sm"} onClick={handleSubmit} variant={"destructive"} disabled={isPending}>
+                    {isPending ? <Loader className="animate-spin" /> : <LogOut />}
+                </Button>
+
+            </TooltipTrigger>
+            <TooltipContent>
+                <p>SignOut</p>
+            </TooltipContent>
+        </Tooltip>
+    );
 };
 
 export default SignOutButton;

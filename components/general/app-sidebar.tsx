@@ -1,22 +1,7 @@
 "use client"
 
 import * as React from "react"
-import {
-  BookOpen,
-  Bot,
-  FileText,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
-
 import { NavMain } from "@/components/general/nav-main"
-import { NavProjects } from "@/components/general/nav-projects"
-import { NavSecondary } from "@/components/general/nav-secondary"
 import { NavUser } from "@/components/general/nav-user"
 import {
   Sidebar,
@@ -29,10 +14,24 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { navItems } from "@/utils/nav-items"
+import { useSession } from "@/lib/auth-client"
 
 const data = navItems
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const session = useSession()
+
+  const nouser = !session.data?.user
+  let user
+  if (session.data?.user){
+    user = {
+      name: session.data.user.name,
+      email: session.data.user.email,
+      avatar:  "/avatars/shadcn.jpg"
+    }
+  }
+
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -61,7 +60,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {/* <NavUser user={data.user} /> */}
+        {
+          user && (
+            <NavUser user={user} />
+          )
+        }
       </SidebarFooter>
     </Sidebar>
   )
