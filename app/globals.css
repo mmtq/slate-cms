@@ -165,3 +165,26 @@
     opacity: 1;
   }
 }
+
+
+.ql-snow{
+  border: transparent !important;
+}
+
+.ql-editor{
+  border: none !important;
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+  
+}
+
+.ql-toolbar{
+  background-color: #d4d4d8ae ;
+  border-radius: 5px;
+  color: white
+}
+
+.ql-syntax{
+  font: 'monospace';
+}

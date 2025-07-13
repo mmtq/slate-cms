@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react";
+import { FileText, PenBox } from "lucide-react";
 
 export const navItems = {
   // user: {
@@ -8,9 +8,29 @@ export const navItems = {
   // },
   navMain: [
     {
-      title: "Blog",
+      title: "Blogs",
       url: "/blog",
       icon: FileText,
+      isActive: true,
+      // items: [
+      //   {
+      //     title: "History",
+      //     url: "#",
+      //   },
+      //   {
+      //     title: "Starred",
+      //     url: "#",
+      //   },
+      //   {
+      //     title: "Settings",
+      //     url: "#",
+      //   },
+      // ],
+    },
+    {
+      title: "Create",
+      url: "/create",
+      icon: PenBox,
       isActive: true,
       // items: [
       //   {
