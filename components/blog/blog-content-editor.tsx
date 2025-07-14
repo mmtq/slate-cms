@@ -6,18 +6,17 @@ import { useState } from 'react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 interface Props {
-
+    content: string
+    setContent: (content: string) => void
 }
 
-const BlogContentEditor = ({ }: Props) => {
-    const [content, setContent] = useState('');
+const BlogContentEditor = ({content, setContent }: Props) => {
 
     return (
         <form className="mx-auto">
-            <div className="min-h-[300px]">
                 <ReactQuill
+                    className='max-w-4xl mx-auto min-h-[200px] max-h-[450px]'
                     theme="snow"
-                    placeholder="Start typing..."
                     value={content}
                     onChange={setContent}
                     modules={{
@@ -38,29 +37,12 @@ const BlogContentEditor = ({ }: Props) => {
                         'underline',
                         'strike',
                         'list',
-                        'bullet',
                         'link',
                         'image',
                         'blockquote',
                         'code-block',
                     ]}
                 />
-            </div>
-            <div className="flex gap-2">
-                <Select defaultValue="draft">
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectItem value="publish">Publish</SelectItem>
-                            <SelectItem value="draft">Draft</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-                <Button type="submit" variant="outline">Save</Button>
-            </div>
-
         </form>
 
     );
