@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
 import { blogSample } from "@/utils/blogs";
 import { Calendar, Layers3, Tag, UserPen } from "lucide-react";
-import Link from "next/link";
 
 export default async function SingleBlog({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -16,7 +15,7 @@ export default async function SingleBlog({ params }: { params: Promise<{ slug: s
 
   return (
     <main className="p-4 max-w-3xl mx-auto overflow-hidden">
-      <ImageWithAutoSize src={blog.image} alt={blog.title} className="mb-6 rounded-lg" />
+      <ImageWithAutoSize src={blog.image} alt={blog.title} className="mb-6 rounded-xs" />
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-center tracking-tight mb-2">{blog.title}</h1>

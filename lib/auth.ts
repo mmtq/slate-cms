@@ -7,6 +7,7 @@ import * as schema from './db/schema/auth-schema'
 
 export const auth = betterAuth({
     appName: "NeuroPress",
+    trustedOrigins: ["http://localhost:3000", "http://192.168.0.101:3000"],
     database: drizzleAdapter(db, {
         provider: "sqlite",
         schema

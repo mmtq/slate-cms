@@ -96,7 +96,7 @@ export default function BlogDetailsForm(props: Props) {
 
   return (
     <motion.div
-      className="space-y-6 mx-auto"
+      className="space-y-3 mx-auto"
       initial="hidden"
       animate="visible"
       variants={{
@@ -155,7 +155,7 @@ export default function BlogDetailsForm(props: Props) {
         </motion.div>
       ))}
 
-      <motion.div variants={fadeInUp} custom={4} className="space-y-2">
+      <motion.div variants={fadeInUp} custom={4} className="flex gap-2">
         <Label>Featured Image</Label>
         <ImageUploader
           // onFileSelect={handleFileSelect}
@@ -165,8 +165,18 @@ export default function BlogDetailsForm(props: Props) {
           setFeaturedImage={setFeaturedImage}
         />
       </motion.div>
+            {previewUrl && (
+        <div className="">
+          <img
+            src={previewUrl}
+            alt="Preview"
+            className="w-full md:w-[70%] rounded-md object-contain max-h-[70vh] mx-auto"
+          />
+        </div>
+      )}
 
-      <motion.div variants={fadeInUp} custom={5} className="space-y-2">
+
+      <motion.div variants={fadeInUp} custom={5} className="flex gap-2">
         <Label htmlFor="category">Category</Label>
         <Select value={category} onValueChange={setCategory}>
           <SelectTrigger className="w-[220px]">
@@ -184,7 +194,7 @@ export default function BlogDetailsForm(props: Props) {
         </Select>
       </motion.div>
 
-      <motion.div variants={fadeInUp} custom={6} className="space-y-2">
+      <motion.div variants={fadeInUp} custom={6} className="flex gap-2">
         <Label htmlFor="tags">Tags</Label>
         <div className="w-full min-h-[42px] border rounded flex flex-wrap items-center gap-1 px-2 py-1 focus-within:ring-2 focus-within:ring-ring">
           {tags.map((tag, idx) => (

@@ -49,35 +49,36 @@ export default function ImageUploader({
         ref={fileInputRef}
         className="hidden"
       />
-      <div className="flex gap-2">
-        <Button size={"sm"} type="button" variant={"secondary"} onClick={handleButtonClick}>
+      <div className="flex gap-2 items-center">
+        <Button size={"sm"} type="button" variant={"outline"} onClick={handleButtonClick}>
           Select
         </Button>
 
         {previewUrl && (
-          <Dialog open={showModal} onOpenChange={setShowModal}>
-            <DialogTrigger asChild>
-              <Button size={"sm"} variant="outline" type="button">
-                Preview
-              </Button>
-            </DialogTrigger>
+          <p className="inline text-sm">{featuredImage!.name}</p>
+          // <Dialog open={showModal} onOpenChange={setShowModal}>
+          //   <DialogTrigger asChild>
+          //     <Button size={"sm"} variant="outline" type="button">
+          //       Preview
+          //     </Button>
+          //   </DialogTrigger>
 
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle>Image Preview</DialogTitle>
-              </DialogHeader>
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="w-full rounded-md object-contain max-h-[70vh]"
-              />
-              <DialogClose asChild>
-                <Button variant="outline" className="mt-4 w-full">
-                  Close
-                </Button>
-              </DialogClose>
-            </DialogContent>
-          </Dialog>
+          //   <DialogContent className="max-w-md">
+          //     <DialogHeader>
+          //       <DialogTitle>Image Preview</DialogTitle>
+          //     </DialogHeader>
+          //     <img
+          //       src={previewUrl}
+          //       alt="Preview"
+          //       className="w-full rounded-md object-contain max-h-[70vh]"
+          //     />
+          //     <DialogClose asChild>
+          //       <Button variant="outline" className="mt-4 w-full">
+          //         Close
+          //       </Button>
+          //     </DialogClose>
+          //   </DialogContent>
+          // </Dialog>
         )}
       </div>
     </div>
