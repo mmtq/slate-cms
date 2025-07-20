@@ -31,17 +31,10 @@ const SignOutButton = ({ }: Props) => {
         })
     }
     return (
-        <Tooltip>
-            <TooltipTrigger asChild>
-                <Button size={"sm"} onClick={handleSubmit} variant={"destructive"} disabled={isPending}>
-                    {isPending ? <Loader className="animate-spin" /> : <LogOut />}
-                </Button>
+        <Button size={"sm"} onClick={handleSubmit} variant={'ghost'} disabled={isPending}>
+            {isPending ? <Loader className="animate-spin" /> : <LogOut />} Sign out
+        </Button>
 
-            </TooltipTrigger>
-            <TooltipContent>
-                <p>SignOut</p>
-            </TooltipContent>
-        </Tooltip>
     );
 };
 

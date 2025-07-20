@@ -25,7 +25,11 @@ export const auth = betterAuth({
         },
     },
     session: {
-        expiresIn: 60 * 60 * 24 * 30,
+        expiresIn: 60 * 60 * 24 * 15,
+        cookieCache: {
+            enabled: true,
+            maxAge: 10*60
+        }
     },
     account:{
         accountLinking:{
@@ -58,5 +62,5 @@ export const auth = betterAuth({
                 }
             }
         }
-    }
+    },
 });

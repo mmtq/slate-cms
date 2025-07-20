@@ -8,9 +8,8 @@ import {
 } from "lucide-react"
 
 import Logo from "@/components/logo"
+import { ModeToggle } from "./toggle-theme"
 import UserMenu from "@/components/user-menu"
-import { ModeToggle } from "../toggle-theme"
-
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -36,7 +35,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import Link from "next/link"
 
 // Navigation links with icons for desktop icon-only navigation
 const navigationLinks = [
@@ -46,8 +44,16 @@ const navigationLinks = [
   { href: "#", label: "Team", icon: UsersIcon },
 ]
 
+// Language options
+const languages = [
+  { value: "en", label: "En" },
+  { value: "es", label: "Es" },
+  { value: "fr", label: "Fr" },
+  { value: "de", label: "De" },
+  { value: "ja", label: "Ja" },
+]
 
-export default function Header() {
+export default function Component() {
   const id = useId()
 
   return (
@@ -118,9 +124,9 @@ export default function Header() {
           </Popover>
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <Link href="/" className="text-primary hover:text-primary/90">
+            <a href="#" className="text-primary hover:text-primary/90">
               <Logo />
-            </Link>
+            </a>
             {/* Desktop navigation - icon only */}
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList className="gap-2">
@@ -155,6 +161,26 @@ export default function Header() {
         <div className="flex items-center gap-2">
           {/* Theme toggle */}
           <ModeToggle />
+          {/* Language selector */}
+          <Select defaultValue="en">
+            <SelectTrigger
+              id={`language-${id}`}
+              className="[&>svg]:text-muted-foreground/80 hover:bg-accent hover:text-accent-foreground h-8 border-none px-2 shadow-none [&>svg]:shrink-0"
+              aria-label="Select language"
+            >
+              <GlobeIcon size={16} aria-hidden="true" />
+              <SelectValue className="hidden sm:inline-flex" />
+            </SelectTrigger>
+            <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2">
+              {languages.map((lang) => (
+                <SelectItem key={lang.value} value={lang.value}>
+                  <span className="flex items-center gap-2">
+                    <span className="truncate">{lang.label}</span>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {/* User menu */}
           <UserMenu />
         </div>

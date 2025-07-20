@@ -5,14 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
-
-// interface statusType{
-//     status: 'draft' | 'publish'
-// }
-
+import { useSession } from "@/lib/auth-client";
+import { storage } from "@/utils/firebase-config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 
 export default function Page() {
+    const router = useRouter()
+
+    const session = useSession()
+    if (!session || !session.data?.user) {
+        router.push('/auth/login')
+    }
+
+    const [isPending, startTransition] = useTransition()
+    
     const [title, setTitle] = useState<string>('');
     const [slug, setSlug] = useState<string>('');
     const [excerpt, setExcerpt] = useState<string>('');
@@ -22,23 +30,33 @@ export default function Page() {
     const [content, setContent] = useState<string>('');
     const [status, setStatus] = useState<string>('draft');
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [featuredImage, setFeaturedImage] = useState<File | null>(null);
 
+    const uploadImage = () => {
+        startTransition( async () => {
+            const storageRef = ref(storage, `images/${featuredImage?.name}`)
+            try {
+                await uploadBytes(storageRef, featuredImage!)
+                const url = await getDownloadURL(storageRef)
+                setPreviewUrl(url)
+                console.log('image uploaded',url)
+            } catch (error) {
+                console.error(error)
+            }
+        })
+    }
 
     const handleClick = () => {
-        console.log('title', title);
-        console.log('excerpt', excerpt);
-        console.log('description', description);
-        console.log('tags', tags);
-        console.log('category', category);
-        console.log('content', content);
-        console.log('status', status);
+        if (featuredImage) {
+            uploadImage()
+        }
     }
 
     return (
-        <div className="p-4 flex w-full flex-col gap-6">
+        <div className="p-4 flex w-full flex-col gap-6 max-w-3xl mx-auto">
             {/* <h1 className="text-2xl font-bold text-center">Create Blog</h1> */}
 
-            <Tabs defaultValue="account">
+            <Tabs defaultValue="account" className="">
                 <TabsList>
                     <TabsTrigger value="account">Details</TabsTrigger>
                     <TabsTrigger value="password">Content</TabsTrigger>
@@ -61,6 +79,8 @@ export default function Page() {
                                 setCategory={setCategory}
                                 previewUrl={previewUrl}
                                 setPreviewUrl={setPreviewUrl}
+                                featuredImage={featuredImage}
+                                setFeaturedImage={setFeaturedImage}
                             />
                         </CardContent>
                     </Card>

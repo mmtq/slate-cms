@@ -11,12 +11,19 @@ import {
 } from "@/components/ui/dialog";
 
 interface Props {
-  onFileSelect: (file: File) => void;
+  // onFileSelect: (file: File) => void;
   previewUrl: string | null
   setPreviewUrl: (previewUrl: string | null) => void
+  featuredImage: File | null
+  setFeaturedImage: (file: File | null) => void
 }
 
-export default function ImageUploader({ onFileSelect, previewUrl, setPreviewUrl }: Props) {
+export default function ImageUploader({
+  previewUrl,
+  setPreviewUrl,
+  featuredImage,
+  setFeaturedImage
+}: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -27,9 +34,9 @@ export default function ImageUploader({ onFileSelect, previewUrl, setPreviewUrl 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      onFileSelect(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
+      setFeaturedImage(file);
     }
   };
 
