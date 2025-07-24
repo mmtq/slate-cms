@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Header from "@/components/general/header";
+import { Footer } from "@/components/general/footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,6 +36,8 @@ export default function RootLayout({
           <main className="w-full max-w-7xl mx-auto">
             {children}
           </main>
+          <hr className="border-muted-foreground mt-4 mb-4" />
+          <Footer />
           <Toaster position="top-center" richColors />
         </ThemeProvider>
       </body>

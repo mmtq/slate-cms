@@ -41,7 +41,7 @@ import Link from "next/link"
 // Navigation links with icons for desktop icon-only navigation
 const navigationLinks = [
   { href: "#", label: "Dashboard", icon: HomeIcon, active: true },
-  { href: "#", label: "Projects", icon: LayersIcon },
+  { href: "/blog", label: "Blogs", icon: LayersIcon },
   { href: "#", label: "Documentation", icon: FileTextIcon },
   { href: "#", label: "Team", icon: UsersIcon },
 ]

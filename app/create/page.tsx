@@ -68,7 +68,7 @@ export default function Page() {
     }
 
     return (
-        <div className="p-4 flex w-full flex-col gap-6 max-w-3xl mx-auto">
+        <div className="p-4 flex w-full flex-col gap-6 max-w-3xl mx-auto min-h-[100vh]">
             <h1 className="text-2xl font-bold text-center md:hidden">Create a New Blog</h1>
 
             <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="">

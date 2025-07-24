@@ -6,13 +6,13 @@ import 'react-quill-new/dist/quill.snow.css';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import ReactQuill from 'react-quill-new';
 import { Button } from '../ui/button';
-import { Sparkle } from 'lucide-react';
+import { Sparkle, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Textarea } from '../ui/textarea';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { AIContentGenerator } from '@/actions/groq-api';
-import { start } from 'repl';
 import { toast } from 'sonner';
+import { Input } from '../ui/input';
 
 interface Props {
   content: string;
@@ -35,6 +35,7 @@ const fadeInUp = {
 export default function BlogContentEditor({ content, setContent, shouldFocus }: Props) {
 
   const [prompt, setPrompt] = useState<string>('');
+  const [customInstructions, setCustomInstructions] = useState<string>('');
   const [isPending, startTransition] = useTransition();
   const [hasSelection, setHasSelection] = useState<boolean>(false);
 
@@ -50,7 +51,7 @@ export default function BlogContentEditor({ content, setContent, shouldFocus }: 
   const generateContent = () => {
     startTransition(async () => {
       try {
-        const res = await AIContentGenerator({ prompt, contentGen: true });
+        const res = await AIContentGenerator({ prompt, customInstructions, contentGen: true });
         const html = marked.parse(res as string); // ✅ Convert to HTML
         setContent(html as any);                  // ✅ Pass HTML to ReactQuill
         dialogCloseRef.current?.click();
@@ -110,7 +111,7 @@ const paraphraseContent = () => {
         {/* <Label className="text-lg font-medium text-foreground mb-2 block">
           Blog Content
         </Label> */}
-        <div className="bg-transparent overflow-hidden focus-within:outline-none">
+        <div className="bg-transparent border rounded-xl overflow-hidden focus-within:outline-none">
           <ReactQuill
             value={content}
             ref={quillRef}
@@ -138,10 +139,11 @@ const paraphraseContent = () => {
       ) : (
         <Dialog>
           <DialogTrigger asChild>
-            <Button size={'sm'} type="button">Generate Content with AI <Sparkle /></Button>
+            <Button size={'sm'} type="button">Generate Content with AI <Sparkles /></Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
+              <DialogTitle className='flex'>Let AI generate content <span><Sparkles className='ml-2' size={16}/></span> </DialogTitle>
               <DialogDescription>
                 Give a brief on the content you want to generate
               </DialogDescription>
@@ -151,6 +153,7 @@ const paraphraseContent = () => {
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Write a blog about..."
             />
+            <Input className="mt-2" placeholder="Custom Instructions (if any)" onChange={(e) => setCustomInstructions(e.target.value)} />
             <DialogFooter>
               <DialogClose asChild ref={dialogCloseRef}>
                 <Button size="sm" variant="ghost">Cancel</Button>

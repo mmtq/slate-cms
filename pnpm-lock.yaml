@@ -104,6 +104,9 @@ importers:
       react-quill-new:
         specifier: ^3.4.6
         version: 3.4.6(quill-delta@5.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      sapling:
+        specifier: ^1.0.0
+        version: 1.0.0
       sonner:
         specifier: ^2.0.6
         version: 2.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -3551,6 +3554,9 @@ packages:
   safe-regex-test@1.1.0:
     resolution: {integrity: sha512-x/+Cz4YrimQxQccJf5mKEbIa1NzeCRNI5Ecl/ekmlYaampdNLPalVyIcCZNNH3MvmqBugV5TMYZXv0ljslUlaw==}
     engines: {node: '>= 0.4'}
+
+  sapling@1.0.0:
+    resolution: {integrity: sha512-2rSAR9TsWLNBD1uxen4sqjESGp2jwVgrn0nrXMVAa9/5hsQd69/PUbFuSY9H+RnmrHZ6J9Zh7lBx8Bg48yXwXg==}
 
   scheduler@0.26.0:
     resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
@@ -7494,6 +7500,8 @@ snapshots:
       call-bound: 1.0.4
       es-errors: 1.3.0
       is-regex: 1.2.1
+
+  sapling@1.0.0: {}
 
   scheduler@0.26.0: {}
 
