@@ -25,7 +25,6 @@ export default function ImageUploader({
   setFeaturedImage
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [showModal, setShowModal] = useState(false);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -56,29 +55,6 @@ export default function ImageUploader({
 
         {previewUrl && (
           <p className="inline text-sm">{featuredImage!.name}</p>
-          // <Dialog open={showModal} onOpenChange={setShowModal}>
-          //   <DialogTrigger asChild>
-          //     <Button size={"sm"} variant="outline" type="button">
-          //       Preview
-          //     </Button>
-          //   </DialogTrigger>
-
-          //   <DialogContent className="max-w-md">
-          //     <DialogHeader>
-          //       <DialogTitle>Image Preview</DialogTitle>
-          //     </DialogHeader>
-          //     <img
-          //       src={previewUrl}
-          //       alt="Preview"
-          //       className="w-full rounded-md object-contain max-h-[70vh]"
-          //     />
-          //     <DialogClose asChild>
-          //       <Button variant="outline" className="mt-4 w-full">
-          //         Close
-          //       </Button>
-          //     </DialogClose>
-          //   </DialogContent>
-          // </Dialog>
         )}
       </div>
     </div>

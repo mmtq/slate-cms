@@ -7,7 +7,6 @@ export async function getTemporaryURL() {
     const url = await pinata.upload.public.createSignedURL({
       expires: 30, // in seconds
     })
-    console.log("Generated signed URL:", url)
     return { url }
   } catch (error) {
     console.error("Error creating signed URL:", error)

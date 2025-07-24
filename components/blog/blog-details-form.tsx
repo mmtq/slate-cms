@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useState, KeyboardEvent as ReactKeyboardEvent, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { Label } from "../ui/label";
 import { X } from "lucide-react";
@@ -16,6 +16,8 @@ import {
 import { Input } from "../ui/input";
 import { slugify } from "@/utils/functions";
 import ImageUploader from "./image-uploader";
+import { getCategories } from "@/actions/post-crud-actions";
+import { categoryType } from "@/utils/types";
 
 interface Props {
   title: string;
@@ -70,6 +72,21 @@ export default function BlogDetailsForm(props: Props) {
   } = props;
 
   const [tagInput, setTagInput] = useState("");
+  const [categories, setCategories] = useState<categoryType[] | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categories = await getCategories();
+        console.log("Categories:", categories);
+        setCategories(categories ?? null);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleTagKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim() !== "") {
@@ -165,7 +182,7 @@ export default function BlogDetailsForm(props: Props) {
           setFeaturedImage={setFeaturedImage}
         />
       </motion.div>
-            {previewUrl && (
+      {previewUrl && (
         <div className="">
           <img
             src={previewUrl}
@@ -184,11 +201,12 @@ export default function BlogDetailsForm(props: Props) {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Categories</SelectLabel>
-              <SelectItem value="technology">Technology</SelectItem>
-              <SelectItem value="design">Design</SelectItem>
-              <SelectItem value="ai">Artificial Intelligence</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
+              {
+                categories &&
+                categories.map((category) => (
+                  <SelectItem key={category.id} value={String(category.id)}>{category.name}</SelectItem>
+                ))
+              }
             </SelectGroup>
           </SelectContent>
         </Select>

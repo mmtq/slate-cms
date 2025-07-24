@@ -9,10 +9,11 @@ import { getTemporaryURL } from "@/actions/pinata";
 import BlogContentEditor from "@/components/blog/blog-content-editor";
 import BlogDetailsForm from "@/components/blog/blog-details-form";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoadingScreen from "@/components/general/loading-screen";
+import { createPost } from "@/actions/post-crud-actions";
+import { toast } from "sonner";
 
 export default function Page() {
     const router = useRouter();
@@ -35,31 +36,61 @@ export default function Page() {
     const [tags, setTags] = useState<string[]>([]);
     const [category, setCategory] = useState<string>('');
     const [content, setContent] = useState<string>('');
-    const [status, setStatus] = useState<string>('draft');
+    const [status, setStatus] = useState<'draft' | 'published'>('draft');
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [featuredImage, setFeaturedImage] = useState<File | null>(null);
 
     const [activeTab, setActiveTab] = useState("details");
+    const [isLoading, setIsLoading] = useState(false);
 
-
-    const uploadImage = async () => {
+    const uploadImage = async (): Promise<string | null> => {
         try {
-            const { url } = await getTemporaryURL()
-            const uploadResponse = await pinata.upload.public.file(
-                featuredImage!).url(url)
-
-            const fileUrl = await pinata.gateways.public.convert(uploadResponse.cid)
-            setPreviewUrl(fileUrl)
+            const { url } = await getTemporaryURL();
+            const uploadResponse = await pinata.upload.public.file(featuredImage!).url(url);
+            const fileUrl = await pinata.gateways.public.convert(uploadResponse.cid);
+            return fileUrl;
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            return null;
         }
-    }
+    };
 
-    const handleClick = () => {
+
+    const handleClick = async () => {
+        setIsLoading(true);
+        let imageUrl = null;
+
         if (featuredImage) {
-            uploadImage()
+            imageUrl = await uploadImage(); 
         }
-    }
+
+        try {
+            const res = await createPost({
+                title,
+                slug,
+                author: session!.user.id,
+                excerpt,
+                description,
+                category: Number(category),
+                tags,
+                content,
+                status,
+                image: imageUrl,
+            });
+
+            if (res.success) {
+                toast.success(res.message);
+            }
+            else {
+                toast.error(res.message);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Something went wrong');
+        }
+
+        setIsLoading(false);
+    };
 
     if (isPending || !checkedAuth) {
         return (
@@ -78,18 +109,18 @@ export default function Page() {
                         <TabsTrigger value="content">Content</TabsTrigger>
                     </TabsList>
                     <div className="flex gap-2 items-center justify-center">
-                        <Select defaultValue={status} onValueChange={(value) => setStatus(value)}>
+                        <Select defaultValue={status} onValueChange={(value) => setStatus(value as "published" | "draft")}>
                             <SelectTrigger className="w-[100px]">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem value="publish">Publish</SelectItem>
+                                    <SelectItem value="published">Publish</SelectItem>
                                     <SelectItem value="draft">Draft</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        <Button type="button" variant="outline" onClick={handleClick}>Save</Button>
+                        <Button type="submit" variant="outline" disabled={isLoading} onClick={handleClick}>{isLoading ? "Saving..." : "Save"}</Button>
                     </div>
 
                 </div>

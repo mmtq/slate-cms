@@ -9,7 +9,13 @@ const nextConfig: NextConfig = {
         hostname: "images.pexels.com",
         port: "",
         pathname: "/**",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "maroon-electronic-gamefowl-694.mypinata.cloud",
+        port: "",
+        pathname: "/**",
+      },
     ]
   }
 };

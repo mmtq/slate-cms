@@ -8,8 +8,9 @@ type BlogCardProps = {
   blog: {
     id: number
     title: string
-    description: string
-    image: string
+    slug: string
+    description: string | null
+    image: string | null,
   }
 }
 
@@ -18,16 +19,15 @@ export default function BlogCard({ blog }: BlogCardProps) {
 
   return (
     <Card
-      onClick={() => router.push(`/blog/${blog.id}`)}
+      onClick={() => router.push(`/blog/${blog.slug}`)}
       className="cursor-pointer group overflow-hidden rounded-2xl border hover:shadow-xl transition-all duration-200 ease-in-out"
     >
       {/* Image Section */}
       <div className="relative w-full h-48 overflow-hidden">
-        <Image
-          src={blog.image}
+        <img
+          src={blog.image ?? "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg"}
           alt={blog.title}
           className="object-cover transition-transform duration-300 group-hover:scale-105"
-          fill
           sizes="(max-width: 768px) 100vw, 33vw"
         />
       </div>

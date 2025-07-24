@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -174,4 +175,50 @@ body {
 
 .ql-syntax{
   font: 'monospace';
+}
+
+/* globals.css or a blog-post.css */
+.blog-content h1 {
+  @apply text-3xl font-bold leading-tight mt-8 mb-4;
+}
+
+.blog-content h2 {
+  @apply text-2xl font-semibold leading-snug mt-6 mb-3;
+}
+
+.blog-content h3 {
+  @apply text-xl font-semibold leading-snug mt-5 mb-2;
+}
+
+.blog-content p {
+  @apply text-base md:text-lg leading-relaxed mb-4;
+}
+
+.blog-content ul,
+.blog-content ol {
+  @apply list-disc pl-6 mb-4;
+}
+
+.blog-content li {
+  @apply mb-2;
+}
+
+.blog-content blockquote {
+  @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 my-6;
+}
+
+.blog-content pre {
+  @apply bg-gray-100 p-4 rounded-md overflow-x-auto text-sm my-6;
+}
+
+.blog-content code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-sm;
+}
+
+.blog-content a {
+  @apply text-blue-600 underline hover:text-blue-800;
+}
+
+.blog-content img {
+  @apply rounded-lg my-6;
 }

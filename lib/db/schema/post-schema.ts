@@ -6,7 +6,7 @@ export const category = sqliteTable(
     "category",
     {
         id: integer('id').primaryKey({ autoIncrement: true }),
-        title: text('title').notNull(),
+        name: text('name').notNull(),
         slug: text('slug').notNull().unique()
     }
 )
@@ -15,7 +15,7 @@ export const tags = sqliteTable(
     "tags",
     {
         id: integer('id').primaryKey({ autoIncrement: true }),
-        title: text('title').notNull(),
+        name: text('name').notNull(),
         slug: text('slug').notNull().unique()
     }
 )
@@ -26,17 +26,33 @@ export const post = sqliteTable(
         id: integer('id').primaryKey({ autoIncrement: true }),
         title: text('title').notNull(),
         slug: text('slug').notNull().unique(),
-        excerpt: text('excerpt').notNull(),
-        description: text('description').notNull(),
+
+        excerpt: text('excerpt'),
+        description: text('description'),
         image: text('image'),
         content: text('content').notNull(),
         status: text('status', { enum: ['draft', 'published', 'archived'] }).default('draft').notNull(),
+
+        categoryId: integer('category_id').notNull().references(() => category.id, { onDelete: 'cascade' }),
+        authorId: text('author_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
         likesCount: integer('likes_count').default(0).notNull(),
 
         createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
         publishedAt: text('published_at'),
         updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
     }
+)
+
+export const postTags = sqliteTable(
+    'post_tags',
+    {
+        id: integer('id').primaryKey({ autoIncrement: true }),
+        postId: integer('post_id').notNull().references(() => post.id, { onDelete: 'cascade' }),
+        tagId: integer('tag_id').notNull().references(() => tags.id, { onDelete: 'cascade' })
+    },
+    (table) => [
+        unique('post_tag_unique').on(table.postId, table.tagId)
+    ]
 )
 
 export const comments = sqliteTable(

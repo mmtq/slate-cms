@@ -1,3 +1,4 @@
+import { getSingleBlog } from "@/actions/post-crud-actions";
 import CommentBox from "@/components/blog/commentbox";
 import ImageWithAutoSize from "@/components/blog/ImageWithAutoSize";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ interface SingleBlogProps {
 export default async function SingleBlog({ params }: SingleBlogProps) {
   const { slug } = await params;
   const blogs = blogSample;
-  const blog = blogs.find((blog) => blog.id === parseInt(slug));
+  const blog = await getSingleBlog(slug);
 
   if (!blog) {
     return (
@@ -26,7 +27,7 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
     <div className="p-4 max-w-3xl mx-auto overflow-hidden">
       {/* Blog Cover */}
       <ImageWithAutoSize
-        src={blog.image}
+        src={blog.image ?? ""}
         alt={blog.title}
         className="mb-6 rounded-md"
       />
@@ -40,11 +41,15 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
       <div className="flex flex-wrap justify-center items-center text-sm text-muted-foreground gap-x-4 gap-y-1 mb-4">
         <div className="flex items-center gap-1">
           <Calendar className="size-4" />
-          <span>{formatDate(blog.createdAt)}</span>
+          <span>
+            {blog.createdAt
+              && formatDate(new Date(blog.createdAt))
+            }
+          </span>
         </div>
         <div className="flex items-center gap-1">
           <UserPen className="size-4" />
-          <span className="font-medium">{blog.author}</span>
+          <span className="font-medium">hi</span>
         </div>
       </div>
 
@@ -57,10 +62,10 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
             variant="secondary"
             className="text-xs px-2 py-0.5 rounded-md"
           >
-            {blog.category}
+            hi
           </Button>
         </div>
-        <div className="flex flex-wrap items-center gap-1">
+        {/* <div className="flex flex-wrap items-center gap-1">
           <Tag className="size-4" />
           {blog.tags.map((tag, index) => (
             <Button
@@ -72,18 +77,16 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
               #{tag}
             </Button>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Description */}
-      <p className="text-center text-muted-foreground text-lg italic mb-6">
-        {blog.description}
-      </p>
+      <div className="" >{blog.description}</div>
 
       {/* Blog Content */}
-      <div className="prose prose-neutral dark:prose-invert max-w-none mb-10">
-        <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-      </div>
+      <article className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }}>
+        {/* blog content here */}
+      </article>
 
       {/* Comments Section */}
       <CommentBox />
