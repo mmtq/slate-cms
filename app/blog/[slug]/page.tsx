@@ -12,8 +12,9 @@ interface SingleBlogProps {
 
 export default async function SingleBlog({ params }: SingleBlogProps) {
   const { slug } = await params;
-  const blogs = blogSample;
-  const blog = await getSingleBlog(slug);
+  let response = await getSingleBlog(slug);
+  const blog = response && response.blog
+  const tags = response && response.tags
 
   if (!blog) {
     return (
@@ -49,7 +50,7 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
         </div>
         <div className="flex items-center gap-1">
           <UserPen className="size-4" />
-          <span className="font-medium">hi</span>
+          <span className="font-medium">{blog.author}</span>
         </div>
       </div>
 
@@ -62,22 +63,22 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
             variant="secondary"
             className="text-xs px-2 py-0.5 rounded-md"
           >
-            hi
+            {blog.category}
           </Button>
         </div>
-        {/* <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1">
           <Tag className="size-4" />
-          {blog.tags.map((tag, index) => (
+          {tags?.map((tag, index) => (
             <Button
               key={index}
               size="sm"
               variant="ghost"
               className="min-w-fit text-xs px-2 py-0.5 rounded-md"
             >
-              #{tag}
+              #{tag.name}
             </Button>
           ))}
-        </div> */}
+        </div>
       </div>
 
       {/* Description */}

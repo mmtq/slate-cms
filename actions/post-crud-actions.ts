@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db";
+import { user } from "@/lib/db/schema/auth-schema";
 import { category, post, postTags, tags } from "@/lib/db/schema/post-schema";
 import { slugify } from "@/utils/functions";
 import { postType } from "@/utils/types";
@@ -104,9 +105,37 @@ export async function getAllBlogs() {
 
 export async function getSingleBlog(slug: string) {
     try {
-        const blog = await db.select().from(post).where(eq(post.slug, slug))
-        return blog[0]
+        const [blog] = await db
+            .select({
+                id: post.id,
+                title: post.title,
+                slug: post.slug,
+                excerpt: post.excerpt,
+                description: post.description,
+                image: post.image,
+                content: post.content,
+                createdAt: post.createdAt,
+                author: user.name,
+                category: category.name,
+            })
+            .from(post)
+            .innerJoin(user, eq(post.authorId, user.id))
+            .innerJoin(category, eq(post.categoryId, category.id))
+            .where(eq(post.slug, slug));
+
+        const tag = await db.select(
+            {
+                name: tags.name,
+                slug: tags.slug
+            }
+        ).from(postTags).where(eq(postTags.postId, blog.id)).innerJoin(tags, eq(postTags.tagId, tags.id))
+
+        return {
+            blog: blog,
+            tags: tag,
+        }
     } catch (error) {
         console.error(error)
+        return null
     }
 }

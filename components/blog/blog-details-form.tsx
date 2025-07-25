@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, KeyboardEvent as ReactKeyboardEvent, useEffect } from "react";
-import { motion, Variants } from "framer-motion";
 import { Label } from "../ui/label";
 import { X } from "lucide-react";
 import {
@@ -38,19 +37,6 @@ interface Props {
   setFeaturedImage: (file: File | null) => void;
 }
 
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1], // cubic-bezier
-    },
-  }),
-};
-
 export default function BlogDetailsForm(props: Props) {
   const {
     title,
@@ -73,6 +59,7 @@ export default function BlogDetailsForm(props: Props) {
 
   const [tagInput, setTagInput] = useState("");
   const [categories, setCategories] = useState<categoryType[] | null>(null);
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -112,19 +99,8 @@ export default function BlogDetailsForm(props: Props) {
   // };
 
   return (
-    <motion.div
-      className="space-y-3 mx-auto"
-      initial="hidden"
-      animate="visible"
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: 0.1,
-          },
-        },
-      }}
-    >
+    <div
+      className="space-y-3 mx-auto"    >
       {[
         {
           label: "Title",
@@ -154,10 +130,8 @@ export default function BlogDetailsForm(props: Props) {
           onChange: (e: any) => setDescription(e.target.value),
         },
       ].map((field, i) => (
-        <motion.div
+        <div
           key={field.id}
-          variants={fadeInUp}
-          custom={i}
           className="space-y-2"
         >
           <Label htmlFor={field.id}>{field.label}</Label>
@@ -169,10 +143,10 @@ export default function BlogDetailsForm(props: Props) {
             onChange={field.onChange}
             className="w-full p-2 border rounded"
           />
-        </motion.div>
+        </div>
       ))}
 
-      <motion.div variants={fadeInUp} custom={4} className="flex gap-2">
+      <div className="flex gap-2">
         <Label>Featured Image</Label>
         <ImageUploader
           // onFileSelect={handleFileSelect}
@@ -181,7 +155,7 @@ export default function BlogDetailsForm(props: Props) {
           featuredImage={featuredImage}
           setFeaturedImage={setFeaturedImage}
         />
-      </motion.div>
+      </div>
       {previewUrl && (
         <div className="">
           <img
@@ -193,7 +167,7 @@ export default function BlogDetailsForm(props: Props) {
       )}
 
 
-      <motion.div variants={fadeInUp} custom={5} className="flex gap-2">
+      <div className="flex gap-2">
         <Label htmlFor="category">Category</Label>
         <Select value={category} onValueChange={setCategory}>
           <SelectTrigger className="w-[220px]">
@@ -210,9 +184,9 @@ export default function BlogDetailsForm(props: Props) {
             </SelectGroup>
           </SelectContent>
         </Select>
-      </motion.div>
+      </div>
 
-      <motion.div variants={fadeInUp} custom={6} className="flex gap-2">
+      <div className="flex gap-2">
         <Label htmlFor="tags">Tags</Label>
         <div className="w-full min-h-[42px] border rounded flex flex-wrap items-center gap-1 px-2 py-1 focus-within:ring-2 focus-within:ring-ring">
           {tags.map((tag, idx) => (
@@ -242,7 +216,7 @@ export default function BlogDetailsForm(props: Props) {
             className="flex-grow outline-none bg-transparent text-sm py-1"
           />
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

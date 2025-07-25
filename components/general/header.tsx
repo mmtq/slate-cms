@@ -129,12 +129,13 @@ export default function Header() {
                     <NavigationMenuItem key={link.label}>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <NavigationMenuLink
-                            href={link.href}
+                          <NavigationMenuLink asChild
                             className="flex size-8 items-center justify-center p-1.5"
                           >
-                            <link.icon size={20} aria-hidden="true" />
-                            <span className="sr-only">{link.label}</span>
+                            <Link href={link.href}>
+                              <link.icon size={20} aria-hidden="true" />
+                              <span className="sr-only">{link.label}</span>
+                            </Link>
                           </NavigationMenuLink>
                         </TooltipTrigger>
                         <TooltipContent
