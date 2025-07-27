@@ -190,11 +190,8 @@ export default function BlogDetailsForm(props: Props) {
         <Label htmlFor="tags">Tags</Label>
         <div className="w-full min-h-[42px] border rounded flex flex-wrap items-center gap-1 px-2 py-1 focus-within:ring-2 focus-within:ring-ring">
           {tags.map((tag, idx) => (
-            <motion.span
+            <span
               key={idx}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
               className="flex items-center text-sm bg-muted text-muted-foreground px-2 py-0.5 rounded-full"
             >
               {tag}
@@ -205,7 +202,7 @@ export default function BlogDetailsForm(props: Props) {
               >
                 <X size={14} />
               </button>
-            </motion.span>
+            </span>
           ))}
           <input
             type="text"

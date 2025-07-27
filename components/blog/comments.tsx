@@ -5,70 +5,40 @@ import { Button } from "../ui/button";
 import React, { useState } from "react";
 import { Textarea } from "../ui/textarea";
 
-interface Props {}
-
-const comments = [
-  {
-    id: 1,
-    name: "Emily Carter",
-    comment: "I really enjoyed reading this. Thanks for sharing!",
-    likes: 12,
-    replies: [
-      {
-        id: 2,
-        name: "David Nguyen",
-        comment: "Totally agree with you. Very insightful!",
-        likes: 5,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Michael Johnson",
-    comment: "Could you explain a bit more about the last part?",
-    likes: 8,
-    replies: [],
-  },
-  {
-    id: 4,
-    name: "Sophia Martinez",
-    comment: "Great points, especially about staying consistent.",
-    likes: 17,
-    replies: [
-      {
-        id: 5,
-        name: "Ava Patel",
-        comment: "Yes! Consistency really is key.",
-        likes: 4,
-      },
-      {
-        id: 6,
-        name: "Liam Brown",
-        comment: "I second that. Great insight!",
-        likes: 3,
-      },
-    ],
-  },
-  {
-    id: 7,
-    name: "Noah Wilson",
-    comment: "Thanks! This helped clarify a lot for me.",
-    likes: 9,
-    replies: [],
-  },
-];
+interface Props {
+  comments: {
+    id: number;
+    postId: number;
+    userId: string;
+    name: string;
+    parentId: number | null;
+    content: string;
+    likesCount: number;
+    createdAt: string | null;
+    replies: {
+      id: number;
+      postId: number;
+      userId: string;
+      name: string
+      parentId: number | null;
+      content: string;
+      likesCount: number;
+      createdAt: string | null;
+    }[];
+  }[];
+}
 
 
-const Comments = ({}: Props) => {
-    const [activeReplyBox, setActiveReplyBox] = useState<number | null>(null)
+const Comments = ({ comments }: Props) => {
+  const [activeReplyBox, setActiveReplyBox] = useState<number | null>(null)
 
-    const handleReplyBox = (id: number) => {
-        if (activeReplyBox === id){
-            setActiveReplyBox(null)
-        } else {
-            setActiveReplyBox(id)
-        }
+  const handleReplyBox = (id: number) => {
+    if (activeReplyBox === id) {
+      setActiveReplyBox(null)
+    } else {
+      setActiveReplyBox(id)
     }
+  }
   return (
     <div className="mt-6 space-y-6">
       {comments.map((comment) => (
@@ -80,23 +50,23 @@ const Comments = ({}: Props) => {
             <p className="text-sm font-medium text-foreground">{comment.name}</p>
           </div>
           <div className="ml-8 space-y-2">
-            <p className="text-sm text-foreground">{comment.comment}</p>
+            <p className="text-sm text-foreground">{comment.content}</p>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm">
-                Like ({comment.likes})
+                Like ({comment.likesCount})
               </Button>
-              <Button variant="ghost" size="sm" onClick={()=>handleReplyBox(comment.id)} >
+              <Button variant="ghost" size="sm" onClick={() => handleReplyBox(comment.id)} >
                 Reply
               </Button>
             </div>
-            
+
             {
-                comment.id === activeReplyBox && (
-                    <div className="space-y-2">
-                        <Textarea placeholder="Add a reply" defaultValue={"@" + comments.find( c => c.id === activeReplyBox)?.name + " " || ""} />
-                        <Button variant={'secondary'} size={'sm'}>Reply</Button>
-                    </div>
-                )
+              comment.id === activeReplyBox && (
+                <div className="space-y-2">
+                  <Textarea placeholder="Add a reply" defaultValue={"@" + comments.find(c => c.id === activeReplyBox)?.name + " " || ""} />
+                  <Button variant={'secondary'} size={'sm'}>Reply</Button>
+                </div>
+              )
             }
 
             {comment.replies.length > 0 && (
@@ -111,10 +81,10 @@ const Comments = ({}: Props) => {
                     </div>
                     <div className="space-y-1">
                       <p className="text-sm font-medium text-foreground">{reply.name}</p>
-                      <p className="text-sm text-muted-foreground">{reply.comment}</p>
+                      <p className="text-sm text-muted-foreground">{reply.content}</p>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="sm">
-                          Like({reply.likes})
+                          Like({reply.likesCount})
                         </Button>
                         <Button variant="ghost" size="sm">
                           Reply

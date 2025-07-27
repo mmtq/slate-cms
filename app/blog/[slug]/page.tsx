@@ -3,8 +3,8 @@ import CommentBox from "@/components/blog/commentbox";
 import ImageWithAutoSize from "@/components/blog/ImageWithAutoSize";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
-import { blogSample } from "@/utils/blogs";
 import { Calendar, Layers3, Tag, UserPen } from "lucide-react";
+import Image from "next/image";
 
 interface SingleBlogProps {
   params: { slug: string };
@@ -27,11 +27,15 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
   return (
     <div className="p-4 max-w-3xl mx-auto overflow-hidden">
       {/* Blog Cover */}
-      <ImageWithAutoSize
-        src={blog.image ?? ""}
-        alt={blog.title}
-        className="mb-6 rounded-md"
-      />
+      <div className="relative w-full aspect-[16/9] mb-6 rounded-md overflow-hidden">
+        <Image
+          src={blog.image ?? ""}
+          alt={blog.title}
+          fill
+          className="object-cover"
+        />
+      </div>
+
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-center tracking-tight mb-2 text-foreground">
@@ -90,7 +94,7 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
       </article>
 
       {/* Comments Section */}
-      <CommentBox />
+      <CommentBox postId={blog.id}  />
     </div>
   );
 }

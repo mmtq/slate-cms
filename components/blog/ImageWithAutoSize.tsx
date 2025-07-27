@@ -28,7 +28,7 @@ export default function ImageWithAutoSize({
 
   if (!dimensions) {
     return (
-      <div className="flex items-center justify-center w-full h-[400px] bg-muted rounded-xl animate-pulse">
+      <div className="flex m-2 items-center justify-center w-full h-[400px] bg-muted rounded-xl animate-pulse">
         <div className="flex flex-col items-center text-muted-foreground">
           <svg
             className="animate-spin h-6 w-6 mb-2 text-gray-400"

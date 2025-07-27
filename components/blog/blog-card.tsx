@@ -24,11 +24,12 @@ export default function BlogCard({ blog }: BlogCardProps) {
     >
       {/* Image Section */}
       <div className="relative w-full h-48 overflow-hidden">
-        <img
+        <Image
           src={blog.image ?? "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg"}
           alt={blog.title}
           className="object-cover transition-transform duration-300 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 33vw"
+          fill
+          quality={50}
         />
       </div>
 
