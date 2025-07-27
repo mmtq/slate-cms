@@ -2,10 +2,10 @@
 
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema/auth-schema";
-import { category, comments, post, postTags, tags } from "@/lib/db/schema/post-schema";
+import { category, comments, post, postLikes, postTags, tags } from "@/lib/db/schema/post-schema";
 import { slugify } from "@/utils/functions";
 import { postType } from "@/utils/types";
-import { desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 export async function createPost(newPost: postType) {
     try {
@@ -117,6 +117,7 @@ export async function getSingleBlog(slug: string) {
                 createdAt: post.createdAt,
                 author: user.name,
                 category: category.name,
+                likes : post.likesCount
             })
             .from(post)
             .innerJoin(user, eq(post.authorId, user.id))
@@ -219,4 +220,43 @@ export async function getComments(PostId: number) {
     } catch (error) {
         console.error(error)
     }
+}
+
+export async function likePost({ postId, userId }: { postId: number; userId: string }) {
+  try {
+    const checkIfUserLiked = await db
+      .select()
+      .from(postLikes)
+      .where(and(eq(postLikes.postId, postId), eq(postLikes.userId, userId)));
+    if (checkIfUserLiked.length > 0) {
+      return {
+        success: false,
+        message: "You have already liked this post",
+      };
+    }
+
+    const res = await db
+      .insert(postLikes)
+      .values({ postId, userId })
+      .returning();
+
+    if (res.length > 0) {
+      await db
+        .update(post)
+        .set({
+          likesCount: sql`likes_count + 1`,
+        })
+        .where(eq(post.id, postId));
+    }
+    return {
+      success: true,
+      message: "Post liked successfully",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Failed to like post",
+    };
+  }
 }

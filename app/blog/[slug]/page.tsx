@@ -1,9 +1,13 @@
 import { getSingleBlog } from "@/actions/post-crud-actions";
 import CommentBox from "@/components/blog/commentbox";
 import ImageWithAutoSize from "@/components/blog/ImageWithAutoSize";
+import LikeShare from "@/components/blog/like-share";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/auth";
+import { useSession } from "@/lib/auth-client";
 import { formatDate } from "@/lib/utils";
 import { Calendar, Layers3, Tag, UserPen } from "lucide-react";
+import { headers } from "next/headers";
 import Image from "next/image";
 
 interface SingleBlogProps {
@@ -11,6 +15,10 @@ interface SingleBlogProps {
 }
 
 export default async function SingleBlog({ params }: SingleBlogProps) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   const { slug } = await params;
   let response = await getSingleBlog(slug);
   const blog = response && response.blog
@@ -92,6 +100,8 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
       <article className="blog-content" dangerouslySetInnerHTML={{ __html: blog.content }}>
         {/* blog content here */}
       </article>
+
+      <LikeShare likes={blog.likes} postId={blog.id} userId={session?.user?.id} />
 
       {/* Comments Section */}
       <CommentBox postId={blog.id}  />
