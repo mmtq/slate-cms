@@ -2,8 +2,10 @@
 
 import { User } from "lucide-react";
 import { Button } from "../ui/button";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Textarea } from "../ui/textarea";
+import { createComment } from "@/actions/post-crud-actions";
+import { set } from "zod";
 
 interface Props {
   comments: {
@@ -25,12 +27,15 @@ interface Props {
       likesCount: number;
       createdAt: string | null;
     }[];
-  }[];
+  }[],
+  userId?: string
 }
 
-
-const Comments = ({ comments }: Props) => {
+const Comments = ({ comments, userId }: Props) => {
   const [activeReplyBox, setActiveReplyBox] = useState<number | null>(null)
+  const [isPending, startTransition] = useTransition()
+  const [reply, setReply] = useState('')
+  const [error, setError] = useState('')
 
   const handleReplyBox = (id: number) => {
     if (activeReplyBox === id) {
@@ -38,7 +43,33 @@ const Comments = ({ comments }: Props) => {
     } else {
       setActiveReplyBox(id)
     }
+    // setActiveReplyBox(id)
   }
+
+  function handleClick() {
+    startTransition(async () => {
+      try {
+        if (!userId) {
+          setError('You must be logged in to comment')
+        } else {
+          const res = await createComment({ postId: comments[0].postId, userId: userId, content: reply, parentId: activeReplyBox ?? undefined })
+
+          if (res.success && res.comment) {
+            comments.map(comment => {
+              if (comment.id === activeReplyBox) {
+                comment.replies.push(res.comment)
+              }
+            })
+            setActiveReplyBox(null)
+            setReply('')
+            };
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  }
+
   return (
     <div className="mt-6 space-y-6">
       {comments.map((comment) => (
@@ -63,8 +94,9 @@ const Comments = ({ comments }: Props) => {
             {
               comment.id === activeReplyBox && (
                 <div className="space-y-2">
-                  <Textarea placeholder="Add a reply" defaultValue={"@" + comments.find(c => c.id === activeReplyBox)?.name + " " || ""} />
-                  <Button variant={'secondary'} size={'sm'}>Reply</Button>
+                  <Textarea placeholder="Add a reply" onChange={(e) => setReply(e.target.value)}/>
+                  {error && <p className="text-sm text-red-500">{error}</p>}
+                  <Button variant={'secondary'} size={'sm'} onClick={handleClick}>Reply</Button>
                 </div>
               )
             }
@@ -86,9 +118,9 @@ const Comments = ({ comments }: Props) => {
                         <Button variant="ghost" size="sm">
                           Like({reply.likesCount})
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        {/* <Button variant="ghost" size="sm">
                           Reply
-                        </Button>
+                        </Button> */}
                       </div>
                     </div>
                   </div>

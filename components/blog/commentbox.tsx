@@ -109,7 +109,7 @@ const CommentBox = ({ postId }: Props) => {
         </div>
       </div>
 
-      <Comments comments={allComments} />
+      <Comments comments={allComments} userId= {data?.user.id} />
     </div>
   );
 };

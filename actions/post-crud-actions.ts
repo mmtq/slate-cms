@@ -147,12 +147,13 @@ export async function getSingleBlog(slug: string) {
 }
 
 
-export async function createComment({ postId, userId, content }: { postId: number, userId: string, content: string }) {
+export async function createComment({ postId, userId, content, parentId }: { postId: number, userId: string, content: string, parentId?: number }) {
     try {
         const [comment] = await db.insert(comments).values({
             postId,
             userId,
-            content
+            parentId,
+            content,
         }).returning()
 
         const userName = await db.select({
