@@ -1,7 +1,6 @@
 import { useId } from "react"
 import {
   CogIcon,
-  FileTextIcon,
   HomeIcon,
   LayersIcon,
   List,
@@ -32,6 +31,8 @@ import {
 } from "@/components/ui/tooltip"
 import Link from "next/link"
 import Notification from "../blog/notification"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 
 const navigationLinks = [
   { href: "/", label: "Home", icon: HomeIcon, active: true },
@@ -41,8 +42,12 @@ const navigationLinks = [
 ]
 
 
-export default function Header() {
+export default async function Header() {
   const id = useId()
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
   return (
     <header className="border-b px-4 md:px-6 top-0 z-50">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -148,7 +153,7 @@ export default function Header() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           {/* Theme toggle */}
-          <Notification />
+          <Notification userId={session?.user?.id} />
           <ModeToggle />
           {/* User menu */}
           <UserMenu />

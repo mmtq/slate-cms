@@ -117,15 +117,15 @@ export async function getSingleBlog(slug: string, userId?: string) {
                 createdAt: post.createdAt,
                 author: user.name,
                 category: category.name,
-                likes : post.likesCount
+                likes: post.likesCount
             })
             .from(post)
             .innerJoin(user, eq(post.authorId, user.id))
             .innerJoin(category, eq(post.categoryId, category.id))
             .where(eq(post.slug, slug));
-        
+
         let isLikedPost = false
-        if(userId){
+        if (userId) {
             const isLiked = await db.select({
                 isLiked: postLikes.postId
             }).from(postLikes).where(and(eq(postLikes.postId, blog.id), eq(postLikes.userId, userId)))
@@ -170,6 +170,40 @@ export async function createComment({ postId, userId, content, parentId }: { pos
             name: user.name
         }).from(user).where(eq(user.id, userId))
 
+        // let parentCommentUserId: { userId: string }[] | null = null;
+        // if (parentId) {
+        //     parentCommentUserId = await db.select({
+        //         userId: comments.userId
+        //     }).from(comments).where(eq(comments.id, parentId))
+        // }
+        const postOwnerId = await db.select({
+            userId: post.authorId
+        }).from(post).where(eq(post.id, postId))
+
+        // Determine who to notify
+        const recipientIds = []
+        // if (parentCommentUserId && parentCommentUserId.length > 0) {
+        //     recipientIds.push(parentCommentUserId[0].userId)
+        // }
+        if (postOwnerId && postOwnerId.length > 0) {
+            recipientIds.push(postOwnerId[0].userId)
+        }
+        const recipientId = recipientIds[0]
+
+        // Don't notify self
+        if (recipientId === userId) return
+
+        // Send notification
+        await fetch('http://localhost:3000/api/push-notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: recipientId,
+                title: postOwnerId ? 'New comment': 'New reply',
+                message: `${userName[0].name} ${parentId ? 'replied to your comment' : 'commented on your post'}`,
+            }),
+        })
+
         return {
             success: true,
             message: "Comment created successfully",
@@ -188,7 +222,7 @@ export async function createComment({ postId, userId, content, parentId }: { pos
 }
 
 type CommentWithReplies = typeof comments.$inferSelect & {
-    name : string
+    name: string
     replies: typeof comments.$inferSelect[];
 };
 
@@ -232,79 +266,79 @@ export async function getComments(PostId: number) {
 }
 
 export async function likePost({ postId, userId }: { postId: number; userId: string }) {
-  try {
-    const checkIfUserLiked = await db
-      .select()
-      .from(postLikes)
-      .where(and(eq(postLikes.postId, postId), eq(postLikes.userId, userId)));
-    if (checkIfUserLiked.length > 0) {
-      return {
-        success: false,
-        message: "You have already liked this post",
-      };
-    }
+    try {
+        const checkIfUserLiked = await db
+            .select()
+            .from(postLikes)
+            .where(and(eq(postLikes.postId, postId), eq(postLikes.userId, userId)));
+        if (checkIfUserLiked.length > 0) {
+            return {
+                success: false,
+                message: "You have already liked this post",
+            };
+        }
 
-    const res = await db
-      .insert(postLikes)
-      .values({ postId, userId })
-      .returning();
+        const res = await db
+            .insert(postLikes)
+            .values({ postId, userId })
+            .returning();
 
-    if (res.length > 0) {
-      await db
-        .update(post)
-        .set({
-          likesCount: sql`likes_count + 1`,
-        })
-        .where(eq(post.id, postId));
+        if (res.length > 0) {
+            await db
+                .update(post)
+                .set({
+                    likesCount: sql`likes_count + 1`,
+                })
+                .where(eq(post.id, postId));
+        }
+        return {
+            success: true,
+            message: "Post liked successfully",
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            success: false,
+            message: "Failed to like post",
+        };
     }
-    return {
-      success: true,
-      message: "Post liked successfully",
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      message: "Failed to like post",
-    };
-  }
 }
 
 export async function likeComment({ commentId, userId }: { commentId: number; userId: string }) {
-  try {
-    const checkIfUserLiked = await db
-      .select()
-      .from(commentLikes)
-      .where(and(eq(commentLikes.commentId, commentId), eq(commentLikes.userId, userId)));
-    if (checkIfUserLiked.length > 0) {
-      return {
-        success: false,
-        message: "You have already liked this comment",
-      };
-    }
+    try {
+        const checkIfUserLiked = await db
+            .select()
+            .from(commentLikes)
+            .where(and(eq(commentLikes.commentId, commentId), eq(commentLikes.userId, userId)));
+        if (checkIfUserLiked.length > 0) {
+            return {
+                success: false,
+                message: "You have already liked this comment",
+            };
+        }
 
-    const res = await db
-      .insert(commentLikes)
-      .values({ commentId, userId })
-      .returning();
+        const res = await db
+            .insert(commentLikes)
+            .values({ commentId, userId })
+            .returning();
 
-    if (res.length > 0) {
-      await db
-        .update(comments)
-        .set({
-          likesCount: sql`likes_count + 1`,
-        })
-        .where(eq(comments.id, commentId));
+        if (res.length > 0) {
+            await db
+                .update(comments)
+                .set({
+                    likesCount: sql`likes_count + 1`,
+                })
+                .where(eq(comments.id, commentId));
+        }
+        return {
+            success: true,
+            message: "Comment liked successfully",
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            success: false,
+            message: "Failed to like comment",
+        };
     }
-    return {
-      success: true,
-      message: "Comment liked successfully",
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      message: "Failed to like comment",
-    };
-  }
 }
