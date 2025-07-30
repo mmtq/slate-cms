@@ -31,6 +31,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import Link from "next/link"
+import Notification from "../blog/notification"
 
 const navigationLinks = [
   { href: "/", label: "Home", icon: HomeIcon, active: true },
@@ -147,6 +148,7 @@ export default function Header() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           {/* Theme toggle */}
+          <Notification />
           <ModeToggle />
           {/* User menu */}
           <UserMenu />
