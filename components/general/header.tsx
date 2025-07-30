@@ -1,9 +1,10 @@
 import { useId } from "react"
 import {
+  CogIcon,
   FileTextIcon,
-  GlobeIcon,
   HomeIcon,
   LayersIcon,
+  List,
   UsersIcon,
 } from "lucide-react"
 
@@ -24,13 +25,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -38,20 +32,18 @@ import {
 } from "@/components/ui/tooltip"
 import Link from "next/link"
 
-// Navigation links with icons for desktop icon-only navigation
 const navigationLinks = [
-  { href: "#", label: "Dashboard", icon: HomeIcon, active: true },
+  { href: "/", label: "Home", icon: HomeIcon, active: true },
   { href: "/blog", label: "Blogs", icon: LayersIcon },
-  { href: "#", label: "Documentation", icon: FileTextIcon },
-  { href: "#", label: "Team", icon: UsersIcon },
+  { href: "/category", label: "Category", icon: List },
+  { href: "/admin", label: "Admin Panel", icon: CogIcon },
 ]
 
 
 export default function Header() {
   const id = useId()
-
   return (
-    <header className="border-b px-4 md:px-6">
+    <header className="border-b px-4 md:px-6 top-0 z-50">
       <div className="flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">

@@ -3,7 +3,6 @@ import {
   BookOpenIcon,
   Layers2Icon,
   LogIn,
-  LogOutIcon,
   PinIcon,
   Plus,
   UserPenIcon,
@@ -12,7 +11,6 @@ import {
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,7 +22,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useSession } from "@/lib/auth-client"
 import SignOutButton from "./auth/signout-button"
 import Link from "next/link"
 import { auth } from "@/lib/auth"
@@ -36,7 +33,7 @@ export default async function UserMenu() {
   })
   if (!session?.user) {
     return (
-      <Button asChild>
+      <Button size={"sm"} asChild>
         <Link href="/auth/login">
           <LogIn /> <span className="hidden md:block">SignIn</span>
         </Link>
@@ -71,7 +68,7 @@ export default async function UserMenu() {
               {session.user.email}
             </span>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
+          {/* <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
               <BoltIcon size={16} className="opacity-60" aria-hidden="true" />
@@ -97,8 +94,8 @@ export default async function UserMenu() {
               <span>Option 5</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuSeparator /> */}
+          <DropdownMenuItem asChild>
             <SignOutButton />
           </DropdownMenuItem>
         </DropdownMenuContent>
