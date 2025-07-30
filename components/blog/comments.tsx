@@ -4,7 +4,7 @@ import { User } from "lucide-react";
 import { Button } from "../ui/button";
 import React, { useState, useTransition } from "react";
 import { Textarea } from "../ui/textarea";
-import { createComment } from "@/actions/post-crud-actions";
+import { createComment, likeComment } from "@/actions/post-crud-actions";
 import { set } from "zod";
 
 interface Props {
@@ -62,12 +62,23 @@ const Comments = ({ comments, userId }: Props) => {
             })
             setActiveReplyBox(null)
             setReply('')
-            };
+          };
         }
       } catch (error) {
         console.error(error)
       }
     })
+  }
+
+  async function handleLike(commentId: number) {
+    try {
+      if (!userId) {
+        return
+      }
+      const res = await likeComment({ commentId, userId })
+    } catch (error) {
+
+    }
   }
 
   return (
@@ -83,7 +94,7 @@ const Comments = ({ comments, userId }: Props) => {
           <div className="ml-8 space-y-2">
             <p className="text-sm text-foreground">{comment.content}</p>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm">
+              <Button onClick={() => handleLike(comment.id)} variant="ghost" size="sm">
                 Like ({comment.likesCount})
               </Button>
               <Button variant="ghost" size="sm" onClick={() => handleReplyBox(comment.id)} >
@@ -94,7 +105,7 @@ const Comments = ({ comments, userId }: Props) => {
             {
               comment.id === activeReplyBox && (
                 <div className="space-y-2">
-                  <Textarea placeholder="Add a reply" onChange={(e) => setReply(e.target.value)}/>
+                  <Textarea placeholder="Add a reply" onChange={(e) => setReply(e.target.value)} />
                   {error && <p className="text-sm text-red-500">{error}</p>}
                   <Button variant={'secondary'} size={'sm'} onClick={handleClick}>Reply</Button>
                 </div>

@@ -1,4 +1,3 @@
-'use client'
 import {
   BoltIcon,
   BookOpenIcon,
@@ -28,10 +27,14 @@ import {
 import { useSession } from "@/lib/auth-client"
 import SignOutButton from "./auth/signout-button"
 import Link from "next/link"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 
-export default function UserMenu() {
-  const session = useSession()
-  if (!session.data?.user) {
+export default async function UserMenu() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+  if (!session?.user) {
     return (
       <Button asChild>
         <Link href="/auth/login">
@@ -41,7 +44,7 @@ export default function UserMenu() {
     )
   }
 
-  const namesInitials = session.data.user.name.split(" ")
+  const namesInitials = session.user.name.split(" ")
   const avatarFallback = namesInitials.slice(0, 2).map((name) => name[0]).join("") 
 
   return (
@@ -62,10 +65,10 @@ export default function UserMenu() {
         <DropdownMenuContent className="max-w-64" align="end">
           <DropdownMenuLabel className="flex min-w-0 flex-col">
             <span className="text-foreground truncate text-sm font-medium">
-              {session.data.user.name}
+              {session.user.name}
             </span>
             <span className="text-muted-foreground truncate text-xs font-normal">
-              {session.data.user.email}
+              {session.user.email}
             </span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />

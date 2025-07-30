@@ -1,6 +1,5 @@
 import { getSingleBlog } from "@/actions/post-crud-actions";
 import CommentBox from "@/components/blog/commentbox";
-import ImageWithAutoSize from "@/components/blog/ImageWithAutoSize";
 import LikeShare from "@/components/blog/like-share";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
@@ -20,7 +19,7 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
   });
 
   const { slug } = await params;
-  let response = await getSingleBlog(slug);
+  let response = await getSingleBlog(slug, session?.user?.id);
   const blog = response && response.blog
   const tags = response && response.tags
 
@@ -101,7 +100,7 @@ export default async function SingleBlog({ params }: SingleBlogProps) {
         {/* blog content here */}
       </article>
 
-      <LikeShare likes={blog.likes} postId={blog.id} userId={session?.user?.id} />
+      <LikeShare likes={blog.likes}  postId={blog.id} userId={session?.user?.id} isLikedPost={response.isLikedPost} />
 
       {/* Comments Section */}
       <CommentBox postId={blog.id}  />

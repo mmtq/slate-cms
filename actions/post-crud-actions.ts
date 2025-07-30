@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema/auth-schema";
-import { category, comments, post, postLikes, postTags, tags } from "@/lib/db/schema/post-schema";
+import { category, commentLikes, comments, post, postLikes, postTags, tags } from "@/lib/db/schema/post-schema";
 import { slugify } from "@/utils/functions";
 import { postType } from "@/utils/types";
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
@@ -103,7 +103,7 @@ export async function getAllBlogs() {
     }
 }
 
-export async function getSingleBlog(slug: string) {
+export async function getSingleBlog(slug: string, userId?: string) {
     try {
         const [blog] = await db
             .select({
@@ -123,6 +123,14 @@ export async function getSingleBlog(slug: string) {
             .innerJoin(user, eq(post.authorId, user.id))
             .innerJoin(category, eq(post.categoryId, category.id))
             .where(eq(post.slug, slug));
+        
+        let isLikedPost = false
+        if(userId){
+            const isLiked = await db.select({
+                isLiked: postLikes.postId
+            }).from(postLikes).where(and(eq(postLikes.postId, blog.id), eq(postLikes.userId, userId)))
+            isLikedPost = isLiked.length > 0
+        }
 
         if (!blog) {
             throw new Error(`No blog found for slug: ${slug}`);
@@ -140,6 +148,7 @@ export async function getSingleBlog(slug: string) {
         return {
             blog,
             tags: tag,
+            isLikedPost
         };
     } catch (error) {
         console.error(error);
@@ -257,6 +266,45 @@ export async function likePost({ postId, userId }: { postId: number; userId: str
     return {
       success: false,
       message: "Failed to like post",
+    };
+  }
+}
+
+export async function likeComment({ commentId, userId }: { commentId: number; userId: string }) {
+  try {
+    const checkIfUserLiked = await db
+      .select()
+      .from(commentLikes)
+      .where(and(eq(commentLikes.commentId, commentId), eq(commentLikes.userId, userId)));
+    if (checkIfUserLiked.length > 0) {
+      return {
+        success: false,
+        message: "You have already liked this comment",
+      };
+    }
+
+    const res = await db
+      .insert(commentLikes)
+      .values({ commentId, userId })
+      .returning();
+
+    if (res.length > 0) {
+      await db
+        .update(comments)
+        .set({
+          likesCount: sql`likes_count + 1`,
+        })
+        .where(eq(comments.id, commentId));
+    }
+    return {
+      success: true,
+      message: "Comment liked successfully",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Failed to like comment",
     };
   }
 }

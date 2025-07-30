@@ -9,10 +9,12 @@ interface Props {
     likes: number
     postId: number
     userId?: string
+    isLikedPost: boolean
 }
 
-const LikeShare = ({ likes, postId, userId }: Props) => {
+const LikeShare = ({ likes, postId, userId, isLikedPost }: Props) => {
     const [likesCount, setLikesCount] = useState(likes);
+    const [isLiked, setIsLiked] = useState(isLikedPost);
 
     async function onClickLike() {
         try {
@@ -31,7 +33,7 @@ const LikeShare = ({ likes, postId, userId }: Props) => {
     return (
         <div className="flex gap-2">
             <Button disabled={!userId} size={"sm"} onClick={onClickLike}>
-                <ThumbsUp /> <span>{likesCount}</span>
+                <ThumbsUp className={isLiked ? "text-background" : ""} /><span>{likesCount}</span>
             </Button>
             <Button size={"sm"}>
                 <Share2 />
