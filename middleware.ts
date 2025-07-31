@@ -3,6 +3,7 @@ import { getSessionCookie } from "better-auth/cookies";
 
 const protectedRoutes = ["/create", ];
 const authRoutes = ["/auth/login", "/auth/register"];
+const adminRoutes = ["/admin"];
 
 export async function middleware(req: NextRequest) {
     const { nextUrl } = req

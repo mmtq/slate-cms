@@ -34,20 +34,26 @@ import Notification from "../blog/notification"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 
-const navigationLinks = [
-  { href: "/", label: "Home", icon: HomeIcon, active: true },
-  { href: "/blog", label: "Blogs", icon: LayersIcon },
-  { href: "/category", label: "Category", icon: List },
-  { href: "/admin", label: "Admin Panel", icon: CogIcon },
-]
-
-
 export default async function Header() {
   const id = useId()
 
   const session = await auth.api.getSession({
     headers: await headers(),
   })
+
+  const isAdmin = session?.user?.role === "admin"
+
+  const navigationLinks = [
+    { href: "/", label: "Home", icon: HomeIcon, active: true },
+    { href: "/blog", label: "Blogs", icon: LayersIcon },
+    { href: "/category", label: "Category", icon: List },
+  ]
+
+  if (isAdmin) {
+    navigationLinks.push({ href: "/admin", label: "Admin", icon: CogIcon })
+  }
+
+  
   return (
     <header className="border-b px-4 md:px-6 top-0 z-50">
       <div className="flex h-16 items-center justify-between gap-4">

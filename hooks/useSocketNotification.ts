@@ -11,25 +11,35 @@ export function useSocketNotifications(userId?: string) {
   useEffect(() => {
     if (!userId) return
 
-    // Wait for Socket.IO server to mount before connecting
-    fetch('/api/socket').then(() => {
-      const socketIo = io({
-        path: '/api/socketio',
-        query: { userId },
-      })
+    let active = true
 
-      socketIo.on('notification', data => {
-        toast(`${data.title}: ${data.message}`)
-        setUnreadCount(prev => prev + 1)
-      })
+    const initSocket = async () => {
+      try {
+        await fetch('/api/socket') // Ensures server is initialized
+        if (!active) return
 
-      setSocket(socketIo)
+        const socketIo = io({
+          path: '/api/socketio',
+          query: { userId },
+        })
 
-      // Disconnect on cleanup
-      return () => {
-        socketIo.disconnect()
+        socketIo.on('notification', data => {
+          toast(`${data.title}: ${data.message}`)
+          setUnreadCount(prev => prev + 1)
+        })
+
+        setSocket(socketIo)
+      } catch (err) {
+        console.error('Socket init failed', err)
       }
-    })
+    }
+
+    initSocket()
+
+    return () => {
+      active = false
+      socket?.disconnect()
+    }
   }, [userId])
 
   return { unreadCount, clearNotifications: () => setUnreadCount(0) }
